@@ -40,6 +40,40 @@ Beberapa materi yang berhasil saya pelajari, eksplorasi, dan implementasikan pad
 
 ---
 
+## 📝 Tugas Pertemuan 2
+**Tanggal**: Selasa, 27 Oktober 2026  
+**Topik**: Tata Letak Antarmuka (*Layouting Widget*), Pengelolaan Formulir Produk, dan *ListView*
+
+![Tugas Pertemuan 2](docs/tugas-2.png)
+
+### Laporan & Kesimpulan Praktikum:
+Pada praktikum pertemuan kedua ini, saya mendalami perancangan antarmuka pengguna (UI) pada framework Flutter secara lebih komprehensif. Fokus utama pembelajaran adalah memahami mekanisme penataan tata letak (*layouting*), pembuatan formulir interaktif untuk menerima masukan data pengguna (*form handling*), teknik pengiriman data antar-halaman (*passing data*), serta penyajian kumpulan data menggunakan komponen daftar (*list view*).
+
+Poin-poin penting yang telah dipelajari dan diimplementasikan meliputi:
+
+1. **Hierarki dan Tata Letak Linier (Column & Row):**
+   - **Widget Column**: Mampu menyusun elemen anak (*children*) secara vertikal dari atas ke bawah. Diimplementasikan pada `lib/column_widget.dart` untuk menampilkan deretan teks kolom secara berurutan.
+   - **Widget Row**: Mampu mengatur elemen anak berjajar secara horizontal dari kiri ke kanan. Diterapkan pada `lib/row_widget.dart` untuk menampilkan teks baris menyamping.
+   - Memahami perbedaan pemanfaatan sumbu `MainAxisAlignment` (sumbu utama) dan `CrossAxisAlignment` (sumbu silang) untuk mengatur perataan posisi widget secara presisi.
+
+2. **Perancangan Formulir Interaktif (*Form Handling*):**
+   - Membangun halaman form penambahan data produk pada `lib/ui/produk_form.dart` menggunakan `StatefulWidget` untuk menangani perubahan status antarmuka.
+   - Menggunakan widget `TextField` dengan dekorasi `InputDecoration` untuk menyediakan kolom isian Kode Produk, Nama Produk, dan Harga Produk.
+   - Mengintegrasikan `TextEditingController` (`_kodeProdukController`, `_namaProdukController`, `_hargaProdukController`) agar aplikasi dapat mengambil dan memproses teks yang diinputkan oleh pengguna secara real-time.
+   - Menerapkan tipe input numerik melalui properti `keyboardType: TextInputType.number` pada kolom harga produk guna memastikan kenyamanan input data.
+
+3. **Navigasi Layar dan Pengiriman Parameter (*Passing Data*):**
+   - Mengatur aksi tombol simpan (`ElevatedButton`) untuk berpindah layar secara dinamis menggunakan `Navigator.of(context).push()`.
+   - Mengirimkan data nilai dari form ke halaman tujuan rincian produk (`lib/ui/produk_detail.dart`) melalui parameter konstruktor `ProdukDetail(kodeProduk, namaProduk, hargaProduk)`.
+   - Menampilkan kembali nilai data produk yang telah diinputkan pengguna ke dalam kartu informasi (`Card`) yang rapi dan terstruktur.
+
+4. **Penyajian Data Berulang (*ListView & Card*):**
+   - Mengimplementasikan `ListView` pada `lib/ui/produk_page.dart` untuk menampilkan koleksi data barang secara dapat digulir (*scrollable*).
+   - Memanfaatkan kombinasi widget `Card` dan `ListTile` lengkap dengan ikon visual, teks judul produk, dan subjudul harga sehingga menghasilkan tampilan katalog belanja yang bersih dan estetik.
+   - Menyediakan tombol aksi penambahan produk (`IconButton` dengan ikon plus) pada `AppBar` untuk mempermudah navigasi langsung menuju halaman formulir produk.
+
+---
+
 ## 📁 Struktur Direktori Proyek
 
 ```text
@@ -54,10 +88,19 @@ Beberapa materi yang berhasil saya pelajari, eksplorasi, dan implementasikan pad
 │   ├── 08_eksepsi.dart                   # Penanganan error (try, on Exception, catch, finally)
 │   └── 09_async_await.dart               # Pemrograman asinkronus dengan Future dan await
 ├── docs/
-│   └── tugas-1.png                       # Tangkapan layar hasil eksekusi aplikasi Hello World
+│   ├── tugas-1.png                       # Screenshot hasil running Hello World Flutter (Pertemuan 1)
+│   └── tugas-2.png                       # Screenshot hasil running Column & Row Widget (Pertemuan 2)
 ├── lib/
+│   ├── ui/
+│   │   ├── produk_detail.dart            # Layar rincian data produk (passing data)
+│   │   ├── produk_form.dart              # Layar formulir input produk interaktif
+│   │   └── produk_page.dart              # Layar katalog list produk (ListView & Card)
+│   ├── column_widget.dart                # Implementasi widget layout Column
 │   ├── hello_world.dart                  # Widget StatelessWidget halaman Hello World
-│   └── main.dart                         # Titik masuk utama aplikasi Flutter (MyApp)
+│   ├── main.dart                         # Titik masuk utama aplikasi Flutter (Routing & Theme)
+│   └── row_widget.dart                   # Implementasi widget layout Row
+├── test/
+│   └── modul2_test.dart                  # Unit & Widget test pengujian komponen modul 2
 ├── pubspec.yaml                          # Berkas konfigurasi dependensi dan versi Flutter
 └── README.md                             # Laporan dokumentasi praktikum
 ```
@@ -76,13 +119,13 @@ dart run dart_dasar/01_hello_world.dart
 dart run dart_dasar/06_kelas_dan_objek.dart
 ```
 
-### 2. Menjalankan Aplikasi Flutter Hello World
+### 2. Menjalankan Aplikasi Flutter (Pertemuan 1 & 2)
 Pastikan SDK Flutter sudah terpasang, lalu buka terminal pada direktori proyek:
 1. Unduh seluruh dependensi proyek:
    ```bash
    flutter pub get
    ```
-2. Jalankan aplikasi pada peramban Chrome atau emulator:
+2. Menjalankan aplikasi pada browser Chrome atau emulator:
    ```bash
    flutter run -d chrome
    ```
