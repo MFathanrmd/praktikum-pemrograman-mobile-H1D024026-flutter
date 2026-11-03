@@ -22,21 +22,15 @@ Beberapa materi yang berhasil saya pelajari, eksplorasi, dan implementasikan pad
    - **Operasi Aritmatika & Logika**: Mengimplementasikan perhitungan penjumlahan (`+`), pengurangan (`-`), perkalian (`*`), pembagian (`/`), dan sisa bagi (`%`), serta operasi perbandingan dan logika (`>`, `<`, `==`, `&&`).
    - **Struktur Kontrol**: Menerapkan percabangan bersyarat menggunakan `if-else` untuk penentuan alur program, serta perulangan berulang menggunakan `for loop` dan `while loop`.
    - **Fungsi (Functions)**: Membuat fungsi modular yang menerima parameter dan mengembalikan nilai (*return value*), seperti fungsi perhitungan aritmatika dan fungsi pencetak pesan.
-   - **Pemrograman Berorientasi Objek (OOP)**: Merancang sebuah kelas (`Mahasiswa`) lengkap dengan atribut nama, NIM, usia, shift, *constructor*, serta *method* interaktif seperti `perkenalan()` dan `ikutiPraktikum()`.
-   - **Pustaka Bawaan (Import)**: Mengimpor dan memanfaatkan library `dart:math` untuk membangkitkan bilangan acak (`Random().nextInt()`), serta menghitung nilai kuadrat dan akar kuadrat.
-   - **Penanganan Kesalahan (Exception Handling)**: Mengamankan alur program dari *runtime error* dengan menggunakan blok `try ... on UnsupportedError` dan `try ... catch(e) ... finally`.
-   - **Pemrograman Asinkronus (Async-Await)**: Memahami konsep eksekusi *non-blocking* menggunakan `Future`, `async`, dan `await` (mensimulasikan proses unduh data berdurasi waktu tertentu dengan `Future.delayed`).
+   - **Pemrograman Berorientasi Objek (OOP)**: Merancang sebuah kelas (`Mahasiswa`) lengkap dengan atribut nama, NIM, usia, shift, *constructor*, serta *method* interaktif.
+   - **Pustaka Bawaan (Import)**: Mengimpor dan memanfaatkan library `dart:math` untuk membangkitkan bilangan acak dan menghitung nilai pangkat serta akar kuadrat.
+   - **Penanganan Kesalahan (Exception Handling)**: Mengamankan alur program dari *runtime error* dengan blok `try ... on ... catch ... finally`.
+   - **Pemrograman Asinkronus (Async-Await)**: Memahami konsep eksekusi *non-blocking* menggunakan `Future`, `async`, dan `await`.
 
 2. **Pengenalan Framework Flutter & Pembuatan Aplikasi Hello World:**
-   - Memahami struktur direktori proyek Flutter standar (folder `lib/` sebagai lokasi utama kode sumber Dart, file `pubspec.yaml` untuk manajemen dependensi dan aset, serta folder platform pendukung seperti `android/`, `ios/`, dan `web/`).
-   - Memahami fungsi `main()` sebagai titik masuk (*entry point*) dan pemanggilan `runApp()` untuk menginisialisasi aplikasi.
-   - Menerapkan konsep *declarative UI* dengan hierarki *widget tree*:
-     - `StatelessWidget`: Digunakan sebagai kelas pembungkus komponen yang bersifat statis dan tidak mengalami perubahan status secara internal.
-     - `MaterialApp`: Widget tingkat atas (*root widget*) yang menyediakan tema dan konfigurasi desain Material Design.
-     - `Scaffold`: Struktur dasar tata letak layar aplikasi yang menyediakan slot untuk `AppBar` dan `body`.
-     - `AppBar`: Menampilkan bilah judul navigasi di bagian atas dengan teks "Belajar Flutter".
-     - `Center` dan `Text`: Menempatkan elemen teks "Hello World" tepat di bagian tengah layar perangkat.
-   - Mengenal dan memanfaatkan fitur *Hot Reload* dan *Hot Restart*, yang sangat mempercepat proses *development* dan perbaikan tampilan antarmuka secara instan tanpa perlu mematikan aplikasi.
+   - Memahami struktur direktori proyek Flutter, fungsi `main()` sebagai titik masuk, dan pemanggilan `runApp()`.
+   - Menerapkan konsep *declarative UI* dengan hierarki *widget tree*: `MaterialApp` → `Scaffold` → `AppBar` → `Center` → `Text('Hello World')`.
+   - Mengenal dan memanfaatkan fitur *Hot Reload* dan *Hot Restart* untuk mempercepat proses *development*.
 
 ---
 
@@ -52,25 +46,57 @@ Pada praktikum pertemuan kedua ini, saya mendalami perancangan antarmuka penggun
 Poin-poin penting yang telah dipelajari dan diimplementasikan meliputi:
 
 1. **Hierarki dan Tata Letak Linier (Column & Row):**
-   - **Widget Column**: Mampu menyusun elemen anak (*children*) secara vertikal dari atas ke bawah. Diimplementasikan pada `lib/column_widget.dart` untuk menampilkan deretan teks kolom secara berurutan.
-   - **Widget Row**: Mampu mengatur elemen anak berjajar secara horizontal dari kiri ke kanan. Diterapkan pada `lib/row_widget.dart` untuk menampilkan teks baris menyamping.
-   - Memahami perbedaan pemanfaatan sumbu `MainAxisAlignment` (sumbu utama) dan `CrossAxisAlignment` (sumbu silang) untuk mengatur perataan posisi widget secara presisi.
+   - **Widget Column**: Menyusun elemen secara vertikal, diimplementasikan pada `lib/column_widget.dart`.
+   - **Widget Row**: Mengatur elemen berjajar secara horizontal, diterapkan pada `lib/row_widget.dart`.
+   - Memahami `MainAxisAlignment` dan `CrossAxisAlignment` untuk perataan presisi.
 
 2. **Perancangan Formulir Interaktif (*Form Handling*):**
-   - Membangun halaman form penambahan data produk pada `lib/ui/produk_form.dart` menggunakan `StatefulWidget` untuk menangani perubahan status antarmuka.
-   - Menggunakan widget `TextField` dengan dekorasi `InputDecoration` untuk menyediakan kolom isian Kode Produk, Nama Produk, dan Harga Produk.
-   - Mengintegrasikan `TextEditingController` (`_kodeProdukController`, `_namaProdukController`, `_hargaProdukController`) agar aplikasi dapat mengambil dan memproses teks yang diinputkan oleh pengguna secara real-time.
-   - Menerapkan tipe input numerik melalui properti `keyboardType: TextInputType.number` pada kolom harga produk guna memastikan kenyamanan input data.
+   - Membangun halaman form `ProdukForm` sebagai `StatefulWidget` dengan `TextField` dan `TextEditingController` untuk Kode Produk, Nama Produk, dan Harga.
 
 3. **Navigasi Layar dan Pengiriman Parameter (*Passing Data*):**
-   - Mengatur aksi tombol simpan (`ElevatedButton`) untuk berpindah layar secara dinamis menggunakan `Navigator.of(context).push()`.
-   - Mengirimkan data nilai dari form ke halaman tujuan rincian produk (`lib/ui/produk_detail.dart`) melalui parameter konstruktor `ProdukDetail(kodeProduk, namaProduk, hargaProduk)`.
-   - Menampilkan kembali nilai data produk yang telah diinputkan pengguna ke dalam kartu informasi (`Card`) yang rapi dan terstruktur.
+   - Navigasi dinamis menggunakan `Navigator.push()` dengan `MaterialPageRoute`.
+   - Mengirim data form ke `ProdukDetail` melalui parameter konstruktor dan menampilkannya dalam `Card`.
 
 4. **Penyajian Data Berulang (*ListView & Card*):**
-   - Mengimplementasikan `ListView` pada `lib/ui/produk_page.dart` untuk menampilkan koleksi data barang secara dapat digulir (*scrollable*).
-   - Memanfaatkan kombinasi widget `Card` dan `ListTile` lengkap dengan ikon visual, teks judul produk, dan subjudul harga sehingga menghasilkan tampilan katalog belanja yang bersih dan estetik.
-   - Menyediakan tombol aksi penambahan produk (`IconButton` dengan ikon plus) pada `AppBar` untuk mempermudah navigasi langsung menuju halaman formulir produk.
+   - Mengimplementasikan `ListView` di `ProdukPage` dengan kombinasi `Card` dan `ListTile` untuk katalog produk yang rapi dan *scrollable*.
+
+---
+
+## 📝 Tugas Pertemuan 3
+**Tanggal**: Selasa, 3 November 2026  
+**Topik**: *Routes*, Navigasi Samping (*Drawer Sidemenu*), Sistem Login, dan Manajemen Sesi Lokal (*SharedPreferences*)
+
+![Tugas Pertemuan 3](docs/tugas-3.png)
+
+### Laporan & Kesimpulan Praktikum:
+Pada praktikum pertemuan ketiga ini, saya mempelajari cara membangun sistem autentikasi login sederhana, navigasi multi-halaman menggunakan *named routes*, pembuatan menu navigasi samping (*Drawer*), serta penyimpanan data sesi pengguna secara persisten di penyimpanan lokal perangkat menggunakan library `shared_preferences`.
+
+Poin-poin penting yang berhasil saya pelajari dan implementasikan:
+
+1. **Manajemen Sesi Lokal dengan `shared_preferences`:**
+   - Menambahkan dependensi `shared_preferences: ^2.0.17` pada `pubspec.yaml`.
+   - Membuat fungsi `_saveUsername()` pada `LoginPage` untuk menyimpan nilai username ke penyimpanan lokal menggunakan `SharedPreferences.getInstance()` dan metode `setString()`.
+   - Membuat fungsi `_loadUsername()` pada `HomePage` untuk memuat kembali nilai username yang telah tersimpan menggunakan `getString()`, sehingga data sesi tetap persisten meski aplikasi dijalankan ulang.
+
+2. **Sistem Autentikasi Login (`login_page.dart`):**
+   - Membangun halaman login sebagai `StatefulWidget` dengan dua `TextField` (Username & Password) beserta `TextEditingController` masing-masing.
+   - Mengimplementasikan tiga fungsi utama: `_saveUsername()` untuk penyimpanan lokal, `_showInput()` untuk menampilkan widget form input, dan `_showDialog()` untuk menampilkan `AlertDialog` respons.
+   - Logika validasi: jika input username dan password bernilai `'admin'`, tampilkan dialog berhasil lalu navigasi ke `HomePage` menggunakan `Navigator.pushReplacement()`; jika salah, tampilkan pesan gagal tanpa berpindah halaman.
+
+3. **Halaman Beranda dengan Pembacaan Sesi (`home_page.dart`):**
+   - `HomePage` memanggil `_loadUsername()` pada `initState()` untuk membaca username dari `SharedPreferences` secara reaktif, lalu menampilkan pesan sambutan yang dipersonalisasi kepada pengguna.
+   - Halaman ini juga menyematkan `Drawer` yang diarahkan ke komponen `Sidemenu`.
+
+4. **Menu Navigasi Samping (`sidemenu.dart`):**
+   - Membuat komponen `Drawer` yang menampilkan header bergradasi biru berisi nama dan NIM mahasiswa.
+   - Menyediakan dua `ListTile` sebagai menu: **Home** (kembali ke `HomePage`) dan **About** (navigasi ke `AboutPage`).
+
+5. **Halaman About (`about_page.dart`):**
+   - Membuat halaman informasi profil mahasiswa yang menampilkan Nama (`M Fathan Ramdani`), NIM (`H1D024026`), Shift, dan keterangan praktikum dalam tampilan `Card` yang rapi.
+
+6. **Pembaruan `main.dart` & Routing:**
+   - Mengubah `home` di `MaterialApp` dari `ProdukPage` menjadi `const LoginPage()`, sehingga alur aplikasi selalu dimulai dari halaman login.
+   - Mendaftarkan semua rute baru: `/login`, `/home`, `/about` di dalam `routes`.
 
 ---
 
@@ -78,30 +104,37 @@ Poin-poin penting yang telah dipelajari dan diimplementasikan meliputi:
 
 ```text
 ├── dart_dasar/                           # Kumpulan latihan dasar Dart (Modul 1)
-│   ├── 01_hello_world.dart               # Program cetak teks Hello World Dart
-│   ├── 02_tipe_data.dart                 # Demonstrasi tipe data int, double, String, bool, var
-│   ├── 03_operasi_matematika_logika.dart # Operasi hitung aritmatika & relasi logika
-│   ├── 04_struktur_kontrol.dart          # Percabangan if-else dan perulangan for / while
-│   ├── 05_fungsi.dart                    # Definisi fungsi berparameter dan return value
-│   ├── 06_kelas_dan_objek.dart           # Konsep OOP (Class Mahasiswa, Constructor, Method)
-│   ├── 07_import_library.dart            # Penggunaan library dart:math untuk angka acak
-│   ├── 08_eksepsi.dart                   # Penanganan error (try, on Exception, catch, finally)
-│   └── 09_async_await.dart               # Pemrograman asinkronus dengan Future dan await
+│   ├── 01_hello_world.dart
+│   ├── 02_tipe_data.dart
+│   ├── 03_operasi_matematika_logika.dart
+│   ├── 04_struktur_kontrol.dart
+│   ├── 05_fungsi.dart
+│   ├── 06_kelas_dan_objek.dart
+│   ├── 07_import_library.dart
+│   ├── 08_eksepsi.dart
+│   └── 09_async_await.dart
 ├── docs/
-│   ├── tugas-1.png                       # Screenshot hasil running Hello World Flutter (Pertemuan 1)
-│   └── tugas-2.png                       # Screenshot hasil running Column & Row Widget (Pertemuan 2)
+│   ├── tugas-1.png                       # Screenshot Hello World (Pertemuan 1)
+│   ├── tugas-2.png                       # Screenshot Column & Row Widget (Pertemuan 2)
+│   └── tugas-3.png                       # Screenshot Login & Home Page (Pertemuan 3)
 ├── lib/
 │   ├── ui/
-│   │   ├── produk_detail.dart            # Layar rincian data produk (passing data)
-│   │   ├── produk_form.dart              # Layar formulir input produk interaktif
-│   │   └── produk_page.dart              # Layar katalog list produk (ListView & Card)
-│   ├── column_widget.dart                # Implementasi widget layout Column
-│   ├── hello_world.dart                  # Widget StatelessWidget halaman Hello World
-│   ├── main.dart                         # Titik masuk utama aplikasi Flutter (Routing & Theme)
-│   └── row_widget.dart                   # Implementasi widget layout Row
+│   │   ├── produk_detail.dart            # Layar rincian data produk
+│   │   ├── produk_form.dart              # Layar formulir input produk
+│   │   └── produk_page.dart              # Layar katalog list produk
+│   ├── about_page.dart                   # Halaman About (profil mahasiswa)
+│   ├── column_widget.dart                # Widget layout Column
+│   ├── hello_world.dart                  # Widget Hello World
+│   ├── home_page.dart                    # Halaman Home (memuat sesi username)
+│   ├── login_page.dart                   # Halaman Login (SharedPreferences & validasi)
+│   ├── main.dart                         # Entry point & routing aplikasi
+│   ├── row_widget.dart                   # Widget layout Row
+│   └── sidemenu.dart                     # Komponen Drawer navigasi samping
 ├── test/
-│   └── modul2_test.dart                  # Unit & Widget test pengujian komponen modul 2
-├── pubspec.yaml                          # Berkas konfigurasi dependensi dan versi Flutter
+│   ├── modul2_test.dart                  # Widget test modul 2
+│   ├── modul3_test.dart                  # Widget test login, about modul 3
+│   └── widget_test.dart
+├── pubspec.yaml                          # Dependensi (shared_preferences: ^2.0.17)
 └── README.md                             # Laporan dokumentasi praktikum
 ```
 
@@ -110,22 +143,21 @@ Poin-poin penting yang telah dipelajari dan diimplementasikan meliputi:
 ## 🚀 Panduan Menjalankan Program
 
 ### 1. Menjalankan Kode Latihan Dart (Modul 1)
-Setiap berkas latihan Dart pada folder `dart_dasar/` dapat dijalankan langsung melalui terminal menggunakan perintah Dart SDK:
 ```bash
-# Menjalankan program Hello World Dart
 dart run dart_dasar/01_hello_world.dart
-
-# Menjalankan latihan OOP Class Mahasiswa
 dart run dart_dasar/06_kelas_dan_objek.dart
 ```
 
-### 2. Menjalankan Aplikasi Flutter (Pertemuan 1 & 2)
-Pastikan SDK Flutter sudah terpasang, lalu buka terminal pada direktori proyek:
+### 2. Menjalankan Aplikasi Flutter
+Pastikan SDK Flutter sudah terpasang:
 1. Unduh seluruh dependensi proyek:
    ```bash
    flutter pub get
    ```
-2. Menjalankan aplikasi pada browser Chrome atau emulator:
+2. Jalankan aplikasi (mulai dari halaman Login):
    ```bash
    flutter run -d chrome
    ```
+3. Gunakan kredensial berikut untuk login:
+   - **Username**: `admin`
+   - **Password**: `admin`
