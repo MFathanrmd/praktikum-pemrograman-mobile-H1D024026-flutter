@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'login_page.dart';
+import 'home_page.dart';
+import 'about_page.dart';
+import 'sidemenu.dart';
 import 'hello_world.dart';
 import 'column_widget.dart';
 import 'row_widget.dart';
@@ -22,8 +26,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: false,
       ),
-      home: const ProdukPage(),
+      // Pertemuan 3: app dimulai dari halaman Login
+      home: const LoginPage(),
       routes: {
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => const HomePage(),
+        '/about': (context) => const AboutPage(),
         '/hello': (context) => const HelloWorld(),
         '/column': (context) => const ColumnWidget(),
         '/row': (context) => const RowWidget(),
