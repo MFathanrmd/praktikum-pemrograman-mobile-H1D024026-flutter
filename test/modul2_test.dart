@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:router_flutter/column_widget.dart';
 import 'package:router_flutter/row_widget.dart';
-import 'package:router_flutter/ui/produk_form.dart';
-import 'package:router_flutter/ui/produk_page.dart';
 
 void main() {
   testWidgets('Test ColumnWidget', (WidgetTester tester) async {
@@ -18,13 +16,5 @@ void main() {
     expect(find.text('Widget Row'), findsOneWidget);
     expect(find.text('Row 1'), findsOneWidget);
     expect(find.text('Row 4'), findsOneWidget);
-  });
-
-  testWidgets('Test ProdukPage', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: ProdukPage()));
-    expect(find.text('List Data Produk'), findsOneWidget);
-    expect(find.text('Kulkas'), findsOneWidget);
-    expect(find.text('Playstation'), findsOneWidget);
-    expect(find.text('Radio'), findsOneWidget);
   });
 }

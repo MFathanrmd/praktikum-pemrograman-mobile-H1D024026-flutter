@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'produk_form.dart';
+import 'package:router_flutter/model/produk.dart';
+import 'package:router_flutter/ui/produk_detail.dart';
+import 'package:router_flutter/ui/produk_form.dart';
 
 class ProdukPage extends StatefulWidget {
-  const ProdukPage({super.key});
+  const ProdukPage({Key? key}) : super(key: key);
 
   @override
-  State<ProdukPage> createState() => _ProdukPageState();
+  _ProdukPageState createState() => _ProdukPageState();
 }
 
 class _ProdukPageState extends State<ProdukPage> {
@@ -13,61 +15,113 @@ class _ProdukPageState extends State<ProdukPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Data Produk'),
+        title: const Text('List Produk'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: 'Tambah Produk',
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const ProdukForm(),
-                ),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              child: const Icon(Icons.add, size: 26.0),
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProdukForm()),
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(Icons.account_circle, size: 48, color: Colors.white),
+                  SizedBox(height: 8),
+                  Text(
+                    'TokoKita',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'M Fathan Ramdani - H1D024026',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: const Text('Logout'),
+              trailing: const Icon(Icons.logout),
+              onTap: () async {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+      ),
+      body: ListView(
+        children: [
+          ItemProduk(
+            produk: Produk(
+              id: 1,
+              kodeProduk: 'A001',
+              namaProduk: 'Kamera',
+              hargaProduk: 5000000,
+            ),
+          ),
+          ItemProduk(
+            produk: Produk(
+              id: 2,
+              kodeProduk: 'A002',
+              namaProduk: 'Kulkas',
+              hargaProduk: 2500000,
+            ),
+          ),
+          ItemProduk(
+            produk: Produk(
+              id: 3,
+              kodeProduk: 'A003',
+              namaProduk: 'Mesin Cuci',
+              hargaProduk: 2000000,
+            ),
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        children: const [
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 6),
-            child: ListTile(
-              leading: Icon(Icons.kitchen, color: Colors.blue),
-              title: Text(
-                'Kulkas',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text('Rp 30.000'),
+    );
+  }
+}
+
+class ItemProduk extends StatelessWidget {
+  final Produk produk;
+
+  const ItemProduk({Key? key, required this.produk}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProdukDetail(
+              produk: produk,
             ),
           ),
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 6),
-            child: ListTile(
-              leading: Icon(Icons.sports_esports, color: Colors.green),
-              title: Text(
-                'Playstation',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text('Rp 30.000'),
-            ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: ListTile(
+          title: Text(
+            produk.namaProduk ?? '',
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 6),
-            child: ListTile(
-              leading: Icon(Icons.radio, color: Colors.orange),
-              title: Text(
-                'Radio',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle: Text('Rp 30.000'),
-            ),
-          ),
-        ],
+          subtitle: Text("Rp. ${produk.hargaProduk?.toString() ?? '0'}"),
+        ),
       ),
     );
   }
