@@ -75,28 +75,56 @@ Poin-poin penting yang berhasil saya pelajari dan implementasikan:
 
 1. **Manajemen Sesi Lokal dengan `shared_preferences`:**
    - Menambahkan dependensi `shared_preferences: ^2.0.17` pada `pubspec.yaml`.
-   - Membuat fungsi `_saveUsername()` pada `LoginPage` untuk menyimpan nilai username ke penyimpanan lokal menggunakan `SharedPreferences.getInstance()` dan metode `setString()`.
-   - Membuat fungsi `_loadUsername()` pada `HomePage` untuk memuat kembali nilai username yang telah tersimpan menggunakan `getString()`, sehingga data sesi tetap persisten meski aplikasi dijalankan ulang.
+   - Membuat fungsi `_saveUsername()` pada `LoginPage` untuk menyimpan nilai username ke penyimpanan lokal menggunakan `SharedPreferences.getInstance()`.
+   - Membuat fungsi `_loadUsername()` pada `HomePage` untuk memuat kembali nilai username dari penyimpanan lokal secara reaktif.
 
 2. **Sistem Autentikasi Login (`login_page.dart`):**
-   - Membangun halaman login sebagai `StatefulWidget` dengan dua `TextField` (Username & Password) beserta `TextEditingController` masing-masing.
-   - Mengimplementasikan tiga fungsi utama: `_saveUsername()` untuk penyimpanan lokal, `_showInput()` untuk menampilkan widget form input, dan `_showDialog()` untuk menampilkan `AlertDialog` respons.
-   - Logika validasi: jika input username dan password bernilai `'admin'`, tampilkan dialog berhasil lalu navigasi ke `HomePage` menggunakan `Navigator.pushReplacement()`; jika salah, tampilkan pesan gagal tanpa berpindah halaman.
+   - Membangun antarmuka form login dengan validasi input, penyajian umpan balik melalui `AlertDialog`, serta pengalihan halaman ke `HomePage` jika kredensial benar.
 
-3. **Halaman Beranda dengan Pembacaan Sesi (`home_page.dart`):**
-   - `HomePage` memanggil `_loadUsername()` pada `initState()` untuk membaca username dari `SharedPreferences` secara reaktif, lalu menampilkan pesan sambutan yang dipersonalisasi kepada pengguna.
-   - Halaman ini juga menyematkan `Drawer` yang diarahkan ke komponen `Sidemenu`.
+3. **Menu Navigasi Samping (`sidemenu.dart`):**
+   - Membuat komponen `Drawer` dengan `DrawerHeader` kustom serta menu navigasi menuju halaman **Home** dan **About**.
 
-4. **Menu Navigasi Samping (`sidemenu.dart`):**
-   - Membuat komponen `Drawer` yang menampilkan header bergradasi biru berisi nama dan NIM mahasiswa.
-   - Menyediakan dua `ListTile` sebagai menu: **Home** (kembali ke `HomePage`) dan **About** (navigasi ke `AboutPage`).
+---
 
-5. **Halaman About (`about_page.dart`):**
-   - Membuat halaman informasi profil mahasiswa yang menampilkan Nama (`M Fathan Ramdani`), NIM (`H1D024026`), Shift, dan keterangan praktikum dalam tampilan `Card` yang rapi.
+## 📝 Tugas Pertemuan 4
+**Tanggal**: Selasa, 10 November 2026  
+**Topik**: Operasi CRUD dengan RESTful API CodeIgniter 4 & Integrasi Frontend Flutter (TokoKita)
 
-6. **Pembaruan `main.dart` & Routing:**
-   - Mengubah `home` di `MaterialApp` dari `ProdukPage` menjadi `const LoginPage()`, sehingga alur aplikasi selalu dimulai dari halaman login.
-   - Mendaftarkan semua rute baru: `/login`, `/home`, `/about` di dalam `routes`.
+![Tugas Pertemuan 4](docs/tugas-4.png)
+
+### Laporan & Kesimpulan Praktikum:
+Pada praktikum pertemuan keempat ini, fokus pembelajaran berada pada perancangan antarmuka *frontend* aplikasi mobile **TokoKita** berbasis Flutter yang dipersiapkan untuk integrasi *full-stack* dengan *backend* RESTful API berbasis framework CodeIgniter 4 dan database MySQL.
+
+Poin-poin materi dan implementasi yang saya selesaikan pada pertemuan ini meliputi:
+
+1. **Arsitektur Model Data (*JSON Serialization*):**
+   - Merancang model data Dart di dalam folder `lib/model/` yang dilengkapi fungsi *factory* `fromJson` untuk memetakan respons payload JSON dari server API ke dalam objek Dart yang *type-safe*:
+     - `Login` (`lib/model/login.dart`): Mengelola token sesi autentikasi dan data ringkas akun pengguna (`userID`, `userEmail`).
+     - `Registrasi` (`lib/model/registrasi.dart`): Mengelola status dan pesan respons dari *endpoint* pendaftaran akun baru.
+     - `Produk` (`lib/model/produk.dart`): Mengelola atribut barang berupa `id`, `kodeProduk`, `namaProduk`, dan `hargaProduk`.
+
+2. **Halaman Registrasi Pengguna Baru (`lib/ui/registrasi_page.dart`):**
+   - Mengimplementasikan formulir pendaftaran akun lengkap dengan validasi komprehensif menggunakan `GlobalKey<FormState>`:
+     - Validasi panjang minimal karakter nama pengguna.
+     - Validasi format penulisan email menggunakan ekspresi reguler (*RegExp*).
+     - Validasi panjang minimal kata sandi (minimal 6 karakter).
+     - Validasi kesesuaian nilai kolom konfirmasi kata sandi agar identik dengan kata sandi utama.
+
+3. **Halaman Login TokoKita (`lib/ui/login_page.dart`):**
+   - Membangun antarmuka masuk akun dengan masukan email dan password, serta tautan navigasi langsung menuju layar pendaftaran akun baru (*Registrasi*) bagi pengguna yang belum terdaftar.
+
+4. **Katalog Produk TokoKita (`lib/ui/produk_page.dart`):**
+   - Menyajikan daftar produk barang menggunakan `ListView` dengan kartu `Card` dan `ListTile` interaktif (Kamera, Kulkas, Mesin Cuci).
+   - Menyediakan tombol aksi tambah produk pada `AppBar` serta menu navigasi samping (*Drawer*) untuk aksi *Logout*.
+   - Setiap kartu produk dapat ditekan (*GestureDetector*) untuk berpindah ke rincian produk terkait.
+
+5. **Rincian Produk & Dialog Konfirmasi Aksi (`lib/ui/produk_detail.dart`):**
+   - Menampilkan detail data produk terpilih secara rapi.
+   - Menyediakan tombol **EDIT** untuk membuka formulir ubah data produk dengan data terisi otomatis (*pre-filled*).
+   - Menyediakan tombol **DELETE** yang memicu *modal dialog* konfirmasi (`AlertDialog`) sebelum tindakan penghapusan dijalankan demi mencegah kekeliruan pengguna.
+
+6. **Formulir Tambah & Ubah Produk Multi-Fungsi (`lib/ui/produk_form.dart`):**
+   - Menerapkan fungsi adaptif `isUpdate()`: formulir otomatis beralih menjadi mode **"TAMBAH PRODUK"** (tombol *SIMPAN*) jika objek produk kosong, atau mode **"UBAH PRODUK"** (tombol *UBAH*) dengan data bawaan terisi di *controller* jika menerima objek produk dari layar detail.
 
 ---
 
@@ -116,48 +144,63 @@ Poin-poin penting yang berhasil saya pelajari dan implementasikan:
 ├── docs/
 │   ├── tugas-1.png                       # Screenshot Hello World (Pertemuan 1)
 │   ├── tugas-2.png                       # Screenshot Column & Row Widget (Pertemuan 2)
-│   └── tugas-3.png                       # Screenshot Login & Home Page (Pertemuan 3)
+│   ├── tugas-3.png                       # Screenshot Login & Home Page (Pertemuan 3)
+│   └── tugas-4.png                       # Screenshot CRUD TokoKita (Pertemuan 4)
 ├── lib/
+│   ├── model/
+│   │   ├── login.dart                    # Model deserialisasi data Login
+│   │   ├── produk.dart                   # Model deserialisasi data Produk
+│   │   └── registrasi.dart               # Model deserialisasi data Registrasi
 │   ├── ui/
-│   │   ├── produk_detail.dart            # Layar rincian data produk
-│   │   ├── produk_form.dart              # Layar formulir input produk
-│   │   └── produk_page.dart              # Layar katalog list produk
-│   ├── about_page.dart                   # Halaman About (profil mahasiswa)
+│   │   ├── login_page.dart               # Layar Login TokoKita (Modul 4)
+│   │   ├── produk_detail.dart            # Layar rincian data produk & konfirmasi hapus
+│   │   ├── produk_form.dart              # Formulir tambah & ubah data produk
+│   │   ├── produk_page.dart              # Layar katalog list produk TokoKita
+│   │   └── registrasi_page.dart          # Layar formulir registrasi akun baru
+│   ├── about_page.dart                   # Halaman About profil mahasiswa
 │   ├── column_widget.dart                # Widget layout Column
 │   ├── hello_world.dart                  # Widget Hello World
 │   ├── home_page.dart                    # Halaman Home (memuat sesi username)
-│   ├── login_page.dart                   # Halaman Login (SharedPreferences & validasi)
-│   ├── main.dart                         # Entry point & routing aplikasi
+│   ├── login_page.dart                   # Halaman Login SharedPreferences (Modul 3)
+│   ├── main.dart                         # Entry point & routing aplikasi TokoKita
 │   ├── row_widget.dart                   # Widget layout Row
 │   └── sidemenu.dart                     # Komponen Drawer navigasi samping
 ├── test/
-│   ├── modul2_test.dart                  # Widget test modul 2
-│   ├── modul3_test.dart                  # Widget test login, about modul 3
-│   └── widget_test.dart
-├── pubspec.yaml                          # Dependensi (shared_preferences: ^2.0.17)
+│   ├── modul2_test.dart                  # Widget test layout modul 2
+│   ├── modul3_test.dart                  # Widget test autentikasi modul 3
+│   └── modul4_test.dart                  # Unit test model & widget test TokoKita modul 4
+├── pubspec.yaml                          # Konfigurasi dependensi proyek
 └── README.md                             # Laporan dokumentasi praktikum
 ```
 
 ---
 
-## 🚀 Panduan Menjalankan Program
+## 🚀 Panduan Menjalankan Proyek
 
-### 1. Menjalankan Kode Latihan Dart (Modul 1)
-```bash
-dart run dart_dasar/01_hello_world.dart
-dart run dart_dasar/06_kelas_dan_objek.dart
-```
+### 1. Menjalankan Backend API CodeIgniter 4 (Laragon / XAMPP)
+- Pastikan Apache dan MySQL telah aktif pada web server lokal (Laragon atau XAMPP).
+- Direktori backend: `C:\laragon\www\toko-api`
+- Database: `toko_api` (MySQL port 3306)
+- Base URL API: `http://localhost/toko-api/public/`
+- Daftar Endpoint:
+  - `POST /registrasi` : Registrasi akun pengguna baru
+  - `POST /login` : Autentikasi dan penerbitan token sesi
+  - `GET /produk` : Menampilkan seluruh daftar produk
+  - `POST /produk` : Menambahkan data produk baru
+  - `GET /produk/{id}` : Menampilkan rincian data produk
+  - `PUT /produk/{id}` : Memperbarui data produk
+  - `DELETE /produk/{id}` : Menghapus data produk
 
-### 2. Menjalankan Aplikasi Flutter
-Pastikan SDK Flutter sudah terpasang:
-1. Unduh seluruh dependensi proyek:
-   ```bash
-   flutter pub get
-   ```
-2. Jalankan aplikasi (mulai dari halaman Login):
-   ```bash
-   flutter run -d chrome
-   ```
-3. Gunakan kredensial berikut untuk login:
-   - **Username**: `admin`
-   - **Password**: `admin`
+### 2. Menjalankan Aplikasi Mobile Flutter (TokoKita)
+- Pasang seluruh dependensi:
+  ```bash
+  flutter pub get
+  ```
+- Jalankan aplikasi pada peramban Chrome atau emulator:
+  ```bash
+  flutter run -d chrome
+  ```
+- Menjalankan seluruh pengujian (*tests*):
+  ```bash
+  flutter test
+  ```
