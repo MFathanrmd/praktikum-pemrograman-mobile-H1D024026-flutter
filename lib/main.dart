@@ -1,33 +1,62 @@
 import 'package:flutter/material.dart';
-import 'ui/produk_page.dart';
-import 'ui/login_page.dart' as tokokita_login;
-import 'ui/registrasi_page.dart';
-import 'ui/produk_form.dart';
-import 'ui/produk_detail.dart';
-import 'model/produk.dart';
-import 'hello_world.dart';
-import 'column_widget.dart';
-import 'row_widget.dart';
-import 'login_page.dart' as modul3;
-import 'home_page.dart' as modul3_home;
-import 'about_page.dart' as modul3_about;
+import 'package:router_flutter/helpers/user_info.dart';
+import 'package:router_flutter/ui/login_page.dart';
+import 'package:router_flutter/ui/produk_page.dart';
+import 'package:router_flutter/ui/registrasi_page.dart';
+import 'package:router_flutter/ui/produk_form.dart';
+import 'package:router_flutter/ui/produk_detail.dart';
+import 'package:router_flutter/model/produk.dart';
+import 'package:router_flutter/hello_world.dart';
+import 'package:router_flutter/column_widget.dart';
+import 'package:router_flutter/row_widget.dart';
+import 'package:router_flutter/login_page.dart' as modul3;
+import 'package:router_flutter/home_page.dart' as modul3_home;
+import 'package:router_flutter/about_page.dart' as modul3_about;
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Widget page = const Scaffold(
+    body: Center(child: CircularProgressIndicator()),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    isLogin();
+  }
+
+  void isLogin() async {
+    var token = await UserInfo().getToken();
+    if (token != null && token.isNotEmpty) {
+      setState(() {
+        page = const ProdukPage();
+      });
+    } else {
+      setState(() {
+        page = const LoginPage();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Toko Kita',
       debugShowCheckedModeBanner: false,
-      home: const ProdukPage(),
+      home: page,
       routes: {
         '/produk_page': (context) => const ProdukPage(),
-        '/login': (context) => const tokokita_login.LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/registrasi': (context) => const RegistrasiPage(),
         '/produk_form': (context) => const ProdukForm(),
         '/produk_detail': (context) => ProdukDetail(

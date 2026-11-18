@@ -98,33 +98,61 @@ Pada praktikum pertemuan keempat ini, fokus pembelajaran berada pada perancangan
 Poin-poin materi dan implementasi yang saya selesaikan pada pertemuan ini meliputi:
 
 1. **Arsitektur Model Data (*JSON Serialization*):**
-   - Merancang model data Dart di dalam folder `lib/model/` yang dilengkapi fungsi *factory* `fromJson` untuk memetakan respons payload JSON dari server API ke dalam objek Dart yang *type-safe*:
-     - `Login` (`lib/model/login.dart`): Mengelola token sesi autentikasi dan data ringkas akun pengguna (`userID`, `userEmail`).
-     - `Registrasi` (`lib/model/registrasi.dart`): Mengelola status dan pesan respons dari *endpoint* pendaftaran akun baru.
-     - `Produk` (`lib/model/produk.dart`): Mengelola atribut barang berupa `id`, `kodeProduk`, `namaProduk`, dan `hargaProduk`.
+   - Merancang model data Dart di dalam folder `lib/model/` yang dilengkapi fungsi *factory* `fromJson` untuk memetakan respons payload JSON dari server API ke dalam objek Dart yang *type-safe* (`Login`, `Registrasi`, `Produk`).
 
 2. **Halaman Registrasi Pengguna Baru (`lib/ui/registrasi_page.dart`):**
-   - Mengimplementasikan formulir pendaftaran akun lengkap dengan validasi komprehensif menggunakan `GlobalKey<FormState>`:
-     - Validasi panjang minimal karakter nama pengguna.
-     - Validasi format penulisan email menggunakan ekspresi reguler (*RegExp*).
-     - Validasi panjang minimal kata sandi (minimal 6 karakter).
-     - Validasi kesesuaian nilai kolom konfirmasi kata sandi agar identik dengan kata sandi utama.
+   - Mengimplementasikan formulir pendaftaran akun lengkap dengan validasi komprehensif menggunakan `GlobalKey<FormState>`.
 
 3. **Halaman Login TokoKita (`lib/ui/login_page.dart`):**
-   - Membangun antarmuka masuk akun dengan masukan email dan password, serta tautan navigasi langsung menuju layar pendaftaran akun baru (*Registrasi*) bagi pengguna yang belum terdaftar.
+   - Membangun antarmuka masuk akun dengan masukan email dan password, serta tautan navigasi langsung menuju layar pendaftaran akun baru.
 
 4. **Katalog Produk TokoKita (`lib/ui/produk_page.dart`):**
    - Menyajikan daftar produk barang menggunakan `ListView` dengan kartu `Card` dan `ListTile` interaktif (Kamera, Kulkas, Mesin Cuci).
-   - Menyediakan tombol aksi tambah produk pada `AppBar` serta menu navigasi samping (*Drawer*) untuk aksi *Logout*.
-   - Setiap kartu produk dapat ditekan (*GestureDetector*) untuk berpindah ke rincian produk terkait.
 
 5. **Rincian Produk & Dialog Konfirmasi Aksi (`lib/ui/produk_detail.dart`):**
-   - Menampilkan detail data produk terpilih secara rapi.
-   - Menyediakan tombol **EDIT** untuk membuka formulir ubah data produk dengan data terisi otomatis (*pre-filled*).
-   - Menyediakan tombol **DELETE** yang memicu *modal dialog* konfirmasi (`AlertDialog`) sebelum tindakan penghapusan dijalankan demi mencegah kekeliruan pengguna.
+   - Menampilkan detail data produk terpilih secara rapi, dilengkapi tombol aksi edit dan hapus.
 
 6. **Formulir Tambah & Ubah Produk Multi-Fungsi (`lib/ui/produk_form.dart`):**
-   - Menerapkan fungsi adaptif `isUpdate()`: formulir otomatis beralih menjadi mode **"TAMBAH PRODUK"** (tombol *SIMPAN*) jika objek produk kosong, atau mode **"UBAH PRODUK"** (tombol *UBAH*) dengan data bawaan terisi di *controller* jika menerima objek produk dari layar detail.
+   - Menerapkan fungsi adaptif `isUpdate()`: formulir otomatis beralih menjadi mode **"TAMBAH PRODUK"** atau mode **"UBAH PRODUK"**.
+
+---
+
+## 📝 Tugas Pertemuan 5
+**Tanggal**: Rabu, 18 November 2026  
+**Topik**: Integrasi REST API, Helper Modul, BLoC Pattern, dan Operasi CRUD Penuh pada TokoKita
+
+![Tugas Pertemuan 5](docs/tugas-5.png)
+
+### Laporan & Kesimpulan Praktikum:
+Pada praktikum pertemuan kelima ini, aplikasi mobile **TokoKita** telah berhasil dihubungkan secara nyata dengan *backend* RESTful API. Praktikum ini berfokus pada pemisahan logika bisnis dari antarmuka menggunakan arsitektur **BLoC** (*Business Logic Component*), penyusunan *helper modul* untuk jaringan dan penyimpanan sesi, serta penyelesaian alur siklus hidup CRUD (*Create, Read, Update, Delete*) secara menyeluruh.
+
+Poin-poin penting yang telah dipelajari dan diimplementasikan:
+
+1. **Modul Pembantu Jaringan & Sesi (`lib/helpers/`):**
+   - **`UserInfo` (`user_info.dart`)**: Mengelola token autentikasi JWT (`token`) dan ID pengguna (`userID`) menggunakan `SharedPreferences` agar sesi login tetap tersimpan saat aplikasi ditutup.
+   - **`AppException` (`app_exception.dart`)**: Kelas kustom penanganan galat HTTP seperti `FetchDataException`, `BadRequestException`, `UnauthorisedException`, dan `InvalidInputException`.
+   - **`Api` (`api.dart`)**: Wrapper HTTP terpadu untuk mengeksekusi *request* `GET`, `POST`, dan `DELETE` dengan otomatis menyertakan *header* `Authorization: Bearer <token>` dan menerjemahkan respon status kode server.
+   - **`ApiUrl` (`api_url.dart`)**: Sentralisasi seluruh konstanta *endpoint* REST API TokoKita.
+
+2. **Arsitektur BLoC (*Business Logic Component*) (`lib/bloc/`):**
+   - **`RegistrasiBloc`**: Menangani permintaan pendaftaran akun baru ke endpoint `/registrasi`.
+   - **`LoginBloc`**: Melakukan autentikasi email & password ke endpoint `/login` dan menerima token sesi pengguna.
+   - **`LogoutBloc`**: Menghapus data sesi token dari penyimpanan lokal saat pengguna keluar.
+   - **`ProdukBloc`**: Menyediakan fungsi `getProduks()`, `addProduk()`, `updateProduk()`, dan `deleteProduk()`.
+
+3. **Komponen Dialog Antarmuka (*Custom Dialog Widget*) (`lib/widget/`):**
+   - **`SuccessDialog`**: Menampilkan notifikasi pop-up saat registrasi atau operasi berhasil dijalankan.
+   - **`WarningDialog`**: Menampilkan pesan kesalahan interaktif saat login atau proses API gagal.
+
+4. **Integrasi Penuh pada Layar Aplikasi (`lib/ui/`):**
+   - **Layar Registrasi**: Memanggil `RegistrasiBloc.registrasi()` dan memberikan umpan balik `SuccessDialog` atau `WarningDialog`.
+   - **Layar Login**: Memvalidasi kredensial pengguna via `LoginBloc.login()`, menyimpan token ke `UserInfo`, dan mengarahkan ke `ProdukPage`.
+   - **Katalog Produk**: Menggunakan widget `FutureBuilder<List>` yang terhubung ke `ProdukBloc.getProduks()` untuk merender data produk secara dinamis, serta mendukung aksi *Logout* pada menu drawer samping.
+   - **Form Tambah & Ubah**: Menghubungkan fungsi `simpan()` ke `ProdukBloc.addProduk()` dan fungsi `ubah()` ke `ProdukBloc.updateProduk()`.
+   - **Detail Produk**: Menghubungkan aksi tombol hapus ke `ProdukBloc.deleteProduk()`.
+
+5. **Pengecekan Sesi Otomatis pada Titik Masuk (`lib/main.dart`):**
+   - Saat aplikasi pertama kali dibuka, method `isLogin()` memeriksa ketersediaan token di `UserInfo`. Jika token valid ditemukan, aplikasi langsung membuka `ProdukPage`; jika tidak, aplikasi menampilkan `LoginPage`.
 
 ---
 
@@ -145,31 +173,46 @@ Poin-poin materi dan implementasi yang saya selesaikan pada pertemuan ini melipu
 │   ├── tugas-1.png                       # Screenshot Hello World (Pertemuan 1)
 │   ├── tugas-2.png                       # Screenshot Column & Row Widget (Pertemuan 2)
 │   ├── tugas-3.png                       # Screenshot Login & Home Page (Pertemuan 3)
-│   └── tugas-4.png                       # Screenshot CRUD TokoKita (Pertemuan 4)
+│   ├── tugas-4.png                       # Screenshot CRUD TokoKita (Pertemuan 4)
+│   └── tugas-5.png                       # Screenshot Integrasi REST API TokoKita (Pertemuan 5)
 ├── lib/
+│   ├── bloc/
+│   │   ├── login_bloc.dart               # BLoC controller autentikasi login
+│   │   ├── logout_bloc.dart              # BLoC controller logout
+│   │   ├── produk_bloc.dart              # BLoC controller operasi CRUD produk
+│   │   └── registrasi_bloc.dart          # BLoC controller registrasi akun
+│   ├── helpers/
+│   │   ├── api.dart                      # Wrapper HTTP client (GET, POST, DELETE)
+│   │   ├── api_url.dart                  # Sentralisasi endpoint RESTful API
+│   │   ├── app_exception.dart            # Kustomisasi penanganan error jaringan
+│   │   └── user_info.dart                # Helper manajemen token SharedPreferences
 │   ├── model/
 │   │   ├── login.dart                    # Model deserialisasi data Login
 │   │   ├── produk.dart                   # Model deserialisasi data Produk
 │   │   └── registrasi.dart               # Model deserialisasi data Registrasi
 │   ├── ui/
-│   │   ├── login_page.dart               # Layar Login TokoKita (Modul 4)
-│   │   ├── produk_detail.dart            # Layar rincian data produk & konfirmasi hapus
-│   │   ├── produk_form.dart              # Formulir tambah & ubah data produk
-│   │   ├── produk_page.dart              # Layar katalog list produk TokoKita
-│   │   └── registrasi_page.dart          # Layar formulir registrasi akun baru
+│   │   ├── login_page.dart               # Layar Login TokoKita (terintegrasi API)
+│   │   ├── produk_detail.dart            # Layar rincian data produk & hapus API
+│   │   ├── produk_form.dart              # Formulir tambah & ubah produk API
+│   │   ├── produk_page.dart              # Layar katalog list produk (FutureBuilder)
+│   │   └── registrasi_page.dart          # Layar formulir registrasi akun (API)
+│   ├── widget/
+│   │   ├── success_dialog.dart           # Dialog modal notifikasi sukses
+│   │   └── warning_dialog.dart           # Dialog modal notifikasi peringatan/gagal
 │   ├── about_page.dart                   # Halaman About profil mahasiswa
 │   ├── column_widget.dart                # Widget layout Column
 │   ├── hello_world.dart                  # Widget Hello World
 │   ├── home_page.dart                    # Halaman Home (memuat sesi username)
 │   ├── login_page.dart                   # Halaman Login SharedPreferences (Modul 3)
-│   ├── main.dart                         # Entry point & routing aplikasi TokoKita
+│   ├── main.dart                         # Entry point, routing, & auth checker
 │   ├── row_widget.dart                   # Widget layout Row
 │   └── sidemenu.dart                     # Komponen Drawer navigasi samping
 ├── test/
 │   ├── modul2_test.dart                  # Widget test layout modul 2
 │   ├── modul3_test.dart                  # Widget test autentikasi modul 3
-│   └── modul4_test.dart                  # Unit test model & widget test TokoKita modul 4
-├── pubspec.yaml                          # Konfigurasi dependensi proyek
+│   ├── modul4_test.dart                  # Unit test model & widget test modul 4
+│   └── modul5_test.dart                  # Unit test helper, exception, & dialog modul 5
+├── pubspec.yaml                          # Konfigurasi dependensi (http & shared_preferences)
 └── README.md                             # Laporan dokumentasi praktikum
 ```
 
@@ -181,14 +224,14 @@ Poin-poin materi dan implementasi yang saya selesaikan pada pertemuan ini melipu
 - Pastikan Apache dan MySQL telah aktif pada web server lokal (Laragon atau XAMPP).
 - Direktori backend: `C:\laragon\www\toko-api`
 - Database: `toko_api` (MySQL port 3306)
-- Base URL API: `http://localhost/toko-api/public/`
+- Base URL API: `http://localhost/toko-api/public/` (atau `http://10.0.2.2/toko-api/public` untuk emulator Android)
 - Daftar Endpoint:
   - `POST /registrasi` : Registrasi akun pengguna baru
-  - `POST /login` : Autentikasi dan penerbitan token sesi
+  - `POST /login` : Autentikasi dan penerbitan token sesi JWT
   - `GET /produk` : Menampilkan seluruh daftar produk
   - `POST /produk` : Menambahkan data produk baru
   - `GET /produk/{id}` : Menampilkan rincian data produk
-  - `PUT /produk/{id}` : Memperbarui data produk
+  - `POST /produk/{id}/update` : Memperbarui data produk
   - `DELETE /produk/{id}` : Menghapus data produk
 
 ### 2. Menjalankan Aplikasi Mobile Flutter (TokoKita)
