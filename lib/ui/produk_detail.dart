@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:router_flutter/bloc/produk_bloc.dart';
 import 'package:router_flutter/model/produk.dart';
 import 'package:router_flutter/ui/produk_form.dart';
+import 'package:router_flutter/ui/produk_page.dart';
+import 'package:router_flutter/widget/warning_dialog.dart';
 
 class ProdukDetail extends StatefulWidget {
   final Produk? produk;
@@ -115,10 +118,23 @@ class _ProdukDetailState extends State<ProdukDetail> {
         OutlinedButton(
           child: const Text("Ya"),
           onPressed: () {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Data berhasil dihapus')),
-            );
+            if (widget.produk?.id != null) {
+              ProdukBloc.deleteProduk(id: widget.produk!.id).then((value) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ProdukPage()),
+                );
+              }, onError: (error) {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => const WarningDialog(
+                    description: "Hapus data gagal, silakan coba lagi",
+                  ),
+                );
+              });
+            } else {
+              Navigator.pop(context);
+            }
           },
         ),
         // Tombol batal

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:router_flutter/bloc/login_bloc.dart';
+import 'package:router_flutter/helpers/user_info.dart';
+import 'package:router_flutter/ui/produk_page.dart';
 import 'package:router_flutter/ui/registrasi_page.dart';
+import 'package:router_flutter/widget/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login TokoKita'),
+        title: const Text('Login'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -98,17 +102,55 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       height: 48,
       child: ElevatedButton(
-        child: const Text("Login", style: TextStyle(fontSize: 16)),
+        child: _isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : const Text("Login", style: TextStyle(fontSize: 16)),
         onPressed: () {
           var validate = _formKey.currentState!.validate();
           if (validate) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login TokoKita berhasil diproses')),
-            );
+            if (!_isLoading) _submit();
           }
         },
       ),
     );
+  }
+
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    LoginBloc.login(
+      email: _emailTextboxController.text,
+      password: _passwordTextboxController.text,
+    ).then((value) async {
+      await UserInfo().setToken(value.token.toString());
+      await UserInfo().setUserID(int.parse(value.userID.toString()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ProdukPage()),
+      );
+    }, onError: (error) {
+      print(error);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => const WarningDialog(
+          description: "Login gagal, silahkan coba lagi",
+        ),
+      );
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   // Membuat menu untuk membuka halaman registrasi
